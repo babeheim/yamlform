@@ -1,0 +1,92 @@
+
+survey: 
+- name  : start
+  type  : start
+- name  : end
+  type  : end
+- name  : today
+  type  : today
+- name  : imei
+  type  : imei
+
+- name        : demographic
+  type        : begin group
+  label       : "Demographic information"
+  appearance  : field-list
+  survey:
+  - name   : name
+    type   : text
+    label  : "Please enter your name:"
+  - name   : nationality
+    type   : text
+    label  : "Please enter your country:"
+
+- name        : weather
+  type        : begin group
+  label       : "Weather information"
+  appearance  : field-list
+  survey:
+  - name   : temp
+    type   : text
+    label  : "Temperature:"
+  - name   : humidity
+    type   : select_one humidity
+    label  : "Humidity:"
+  - name   : wind
+    type   : select_one wind
+    label  : "WInd conditions:"
+
+- name  : observation
+  type  : begin repeat
+  survey:
+  - name   : picture
+    type   : photo
+    label  : "If possible, please take a picture of your observation"
+  - name   : bird
+    type   : select_one birds
+    label  : "What bird did you see?"
+    hint   : "Some birds have included images or audio."
+    media  :
+      audio  : question.wav
+  - name   : location
+    type   : gps
+    label  : "Please record your location"
+  - name   : notes
+    type   : text
+    label  : "Please enter any notes about your observation"
+    hint   : "This is optional, of course"
+
+
+choices:
+
+- list name: humidity
+  choices:
+  - name: low
+    label: "Dry or low"
+  - name: med
+    label: "Normal or medium"
+  - name: high
+    label: "Wet or high"
+
+- list name: wind
+  choices:
+  - name: low
+    label: "Little or no wind"
+  - name: med
+    label: "Breezy or light wind"
+  - name: high
+    label: "Strong or very windy"
+
+- list name: birds
+  choices:
+  - name: eagle
+    label: "Eagle"
+    media:
+      image: "eagle.png"
+  - name: kingfisher
+    label: "Kingfisher"
+    media:
+      image: "kingfisher.png"
+# etc. etc.
+
+

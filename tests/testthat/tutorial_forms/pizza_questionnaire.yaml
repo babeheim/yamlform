@@ -1,0 +1,25 @@
+
+survey: 
+- name     : likes_pizza
+  label    : "Do you like pizza?"
+  type     : select_one yes_no
+- name     : pizza_toppings
+  label    : "What are your favorite pizza toppings?"
+  type     : select_multiple pizza_toppings or_other
+  condition: "$(likes_pizza) = 'yes'"
+
+choices:
+- list name: yes_no
+  choices:
+  - name   : "yes"  # yes/no get converted into TRUE/FALSE unless quoted
+    label  : "Yes"
+  - name   : "no"
+    label  : "No"
+- list name: pizza_toppings
+  choices:
+  - name   : cheese
+    label  : "Cheese"
+  - name   : pepperoni
+    label  : "Pepperoni"
+  - name   : sausage
+    label  : "Sausage"

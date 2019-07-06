@@ -1,12 +1,12 @@
 
 
 convert_yamlform <- function(file, output = "xlsx") {
-  file %>% gsub("\\.yaml$", "xlsx", .) -> xlsx_file
+  file %>% gsub("\\.yaml$", ".xlsx", .) -> xlsx_file
   file %>% read_yamlform() %>% write_xlsxform(path = xlsx_file)
   print(paste(xlsx_file, "created!"))
   if (output %in% c("xml", "xform")) {
     system(paste("xls2xform", xlsx_file))
-    xlsx_file %>% gsub("\\.xlsx$", "xml", .) -> xml_file
+    xlsx_file %>% gsub("\\.xlsx$", ".xml", .) -> xml_file
     print(paste(xml_file, "created!"))
   }
 }

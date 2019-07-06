@@ -6,8 +6,6 @@ survey:
   type  : end
 - name  : today
   type  : today
-- name  : imei
-  type  : imei
 
 - name        : demographic
   type        : begin group
@@ -40,7 +38,7 @@ survey:
   type  : begin repeat
   survey:
   - name   : picture
-    type   : photo
+    type   : image
     label  : "If possible, please take a picture of your observation"
   - name   : bird
     type   : select_one birds
@@ -49,7 +47,7 @@ survey:
     media  :
       audio  : question.wav
   - name   : location
-    type   : gps
+    type   : geopoint
     label  : "Please record your location"
   - name   : notes
     type   : text

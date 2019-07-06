@@ -1,8 +1,88 @@
 
+check_tags_against_valid <- function(tags, valid){
+  tags_valid <- tags %in% valid
+  if(!all(tags_valid)){
+    out_msg <- paste0("invalid tags: `",
+      paste(tags[!tags_valid], collapse = "`, `"), "`\n see XLSform documentation")
+    stop(out_msg)
+  }
+}
+
+
+check_form <- function(form) {
+
+  type_options <- c(
+  "start",
+  "end",
+  "today",
+  "deviceid",
+  "subscriberid",
+  "simserial",
+  "phonenumber",
+  "integer",
+  "decimal",
+  "range",
+  "text",
+  "text",
+  "note",
+  "geopoint",
+  "geotrace",
+  "geoshape",
+  "date",
+  "time",
+  "dateTime",
+  "image",
+  "audio",
+  "video",
+  "file",
+  "barcode",
+  "calculate",
+  "acknowledge",
+  "hidden",
+  "xml-external",
+  "begin repeat",
+  "end repeat",
+  "begin group",
+  "end group",
+  "select_one",
+  "select_multiple")
+
+  type_tags <- form$survey$type
+  type_tags <- gsub("select_one .*", "select_one", type_tags)
+  type_tags <- gsub("select_multiple .*", "select_multiple", type_tags)
+  check_tags_against_valid(type_tags, type_options)
+
+  if ("appearance" %in% names(form$survey)) {
+    appearance_tags <- form$survey$appearance
+    appearance_options <- c(
+      "multiline",
+      "minimal",
+      "quick",
+      "no-calendar",
+      "month-year",
+      "year",
+      "horizontal-compact",
+      "horizontal",
+      "likert",
+      "compact",
+      "quickcompact",
+      "field-list",
+      "label",
+      "list-nolabel",
+      "table-list",
+      "signature",
+      "draw",
+      NA)
+
+    check_tags_against_valid(appearance_tags, appearance_options)
+  }
+}
+
 
 convert_yamlform <- function(file, output = "xlsx") {
   file %>% gsub("\\.yaml$", ".xlsx", .) -> xlsx_file
-  file %>% read_yamlform() %>% write_xlsxform(path = xlsx_file)
+  file %>% read_yamlform() %>%
+    write_xlsxform(path = xlsx_file)
   print(paste(xlsx_file, "created!"))
   if (output %in% c("xml", "xform")) {
     system(paste("xls2xform", xlsx_file))
@@ -52,44 +132,6 @@ flatten_variants <- function(survey_object) {
   return(survey_object)
 }
 
-# XLSForm standard document
-
-# the `type` variable has to be one of the following:
-#   - integer
-#   - decimal
-#   - range
-#   - text
-#   - select_one [key] [options]
-#   - select_multiple [key] [options]
-#   - text
-#   - note
-#   - geopoint
-#   - geotrace
-#   - geoshape
-#   - date
-#   - time
-#   - dateTime
-#   - image
-#   - audio
-#   - video
-#   - file
-#   - barcode
-#   - calculate
-#   - acknowledge
-#   - hidden
-#   - xml-external
-#   - begin repeat
-#   - end repeat
-
-# if i want to transfer mine in yaml, why isn't there are write_yamlform?
-
-# and i need a flag to embed_choices or not
-
-# read_yamlform needs to be smart enough to be able to detect embedded choices,
-# pull them out and make them a separate thing
-
-# in YAML, "yes" and "no" cannot be names, they ave to be in quotes or become TRUE/FALSE
-
 
 read_yamlform <- function(path) {
 
@@ -111,6 +153,8 @@ read_yamlform <- function(path) {
   d$survey %>% flatten_variants -> d$survey
   d$survey %>% bind_rows() %>%
     select(type, name, label, everything()) -> d$survey
+
+  d %>% check_form()
 
   return(d)
 
@@ -148,33 +192,18 @@ read_jsonform <- function(path) {
   d$survey %>% bind_rows() %>%
     select(type, name, label, everything()) -> d$survey
 
+  d %>% check_form()
+
   return(d)
 
 }
-
-
-
-
-inspect_xlsxform <- function(path) {}
-# reads it in, tells u if there's bugs
-
-
-# since I'm already at it...
-write_jsonform <- function(form, embed_choices = TRUE) {
-
-}
-
-
-write_yamlform <- function(form, embed_choices = TRUE) {
-
-}
-
 
 read_xlsxform <- function(path) {
   out <- list()
   out$survey <- read.xlsx(path, sheet = "survey")
   out$choices <- read.xlsx(path, sheet = "choices")
   out$settings <- read.xlsx(path, sheet = "settings")
+  out %>% check_form()
   return(out)
 }
 

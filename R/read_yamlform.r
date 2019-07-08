@@ -140,13 +140,14 @@ read_yamlform <- function(path) {
     d$settings %>% as.data.frame() %>% as.tbl() -> d$settings
   }
 
-  # if `choices` exists as its own list already...
-  choices <- list()
-  for (i in 1:length(d$choices)) {
-    d$choices[[i]]$choices %>% bind_rows() %>%
-      mutate(`list name` = d$choices[[i]]$`list name`) -> choices[[i]]
+  if ("choices" %in% names(d)) {
+    choices <- list()
+    for (i in 1:length(d$choices)) {
+      d$choices[[i]]$choices %>% bind_rows() %>%
+        mutate(`list name` = d$choices[[i]]$`list name`) -> choices[[i]]
+    }
+    choices %>% bind_rows -> d$choices
   }
-  choices %>% bind_rows -> d$choices
 
   d$survey %>% ungroup_survey -> d$survey
   d$survey %>% flatten_variants -> d$survey
@@ -170,8 +171,6 @@ read_jsonform <- function(path) {
     d$settings %>% as.data.frame() %>% as.tbl() -> d$settings
   }
 
-  # if `choices` exists as its own list already...
-  # in YAML, "yes" and "no" cannot be names, they ave to be in quotes or become TRUE/FALSE
   if ("choices" %in% names(d)) {
     choices <- list()
     for (i in 1:length(d$choices)) {
@@ -179,11 +178,6 @@ read_jsonform <- function(path) {
         mutate(`list name` = d$choices[[i]]$`list name`) -> choices[[i]]
     }
     choices %>% bind_rows -> d$choices
-  } else {
-    # if `choices` exist within each question, pull them out?
-    # but how does it know the `list name` then?
-    # ah, its in the `type` field
-    # we have to drop duplicates in this case
   }
 
   d$survey %>% ungroup_survey -> d$survey

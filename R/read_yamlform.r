@@ -23,7 +23,6 @@ check_form <- function(form) {
   "decimal",
   "range",
   "text",
-  "text",
   "note",
   "geopoint",
   "geotrace",

@@ -1,0 +1,13 @@
+
+survey:
+- name: hungry
+  label: "Are you hungry?"
+  type: select_one yes_no
+
+choices:
+- list name: yes_no
+  choices:
+  - name: "yes"
+    label: "yes"
+  - name: "no"
+    label: "no"

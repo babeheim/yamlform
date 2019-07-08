@@ -1,0 +1,9 @@
+
+survey:
+- name   : amount
+  label  : "What was the price of the meal?"
+  type   : decimal
+
+- name         : tip
+  type         : calculate
+  calculation  : "${amount} * 0.18"

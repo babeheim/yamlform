@@ -1,0 +1,5 @@
+
+survey:
+- name: name
+  label: "Full Name"
+  type: text

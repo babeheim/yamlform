@@ -1,0 +1,82 @@
+
+survey:
+- name: name
+  label: "Full Name"
+  type: text
+- name: start_time
+  type: start
+- name: end_time
+  type: end
+- name: interview_date
+  type: today
+- name: device_id
+  type: deviceid
+- name: subscriber_id
+  type: subscriberid
+- name: sim
+  type: simserial
+- name: phone_number
+  type: phonenumber
+- name   : favorite_number
+  label  : "What's your favorite number?"
+  type   : integer
+- name   : weight
+  label  : "Weight (kg)"
+  type   : decimal
+- name   : range_example
+  label  : "Range example"
+  type   : range
+- name   : some_text
+  label  : "some text"
+  type   : text
+- name   : displayed_note
+  type   : note
+# no label, since it's a note
+- name   : store_gps
+  label  : "Collect GPS"
+  type   : geopoint
+
+- name   : store_gps_trace
+  label  : "Collect GPS trace"
+  type   : geotrace
+- name   : store_gps_shape
+  label  : "Collect GPS shape"
+  type   : geoshape
+
+- name   : date_of_birth
+  label  : "Enter Date of Birth"
+  type   : date
+
+- name   : time_of_obs
+  label  : "time of observation"
+  type   : time
+
+- name   : date_time
+  label  : "interview date and time"
+  type   : dateTime
+- name   : patient_photo
+  label  : "take a picture"
+  type   : image
+- name   : verbal_consent
+  label  : "record consent"
+  type   : audio
+- name   : demonstration
+  label  : "record dance"
+  type   : video
+- name   : choose_pdf
+  label  : "choose an existing image"
+  type   : file
+- name   : scan_barcode
+  label  : "scan barcode"
+  type   : barcode
+- name   : owner
+  type   : hidden
+# hidden exist in the form but have no UI element, need other information
+- name         : calculate_tip
+  type         : calculate
+  calculation  : "1 + 1"
+- name   : acknowledgement_record
+  label  : "do you agree?"
+  type   : acknowledge
+- name   : xml_external_ex
+  type   : xml-external

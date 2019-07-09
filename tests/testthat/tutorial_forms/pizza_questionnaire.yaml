@@ -3,10 +3,22 @@ survey:
 - name     : likes_pizza
   label    : "Do you like pizza?"
   type     : select_one yes_no
-- name     : pizza_toppings
+- name     : favorite_topping
   label    : "What are your favorite pizza toppings?"
   type     : select_multiple pizza_toppings or_other
-  condition: "$(likes_pizza) = 'yes'"
+  relevant : "$(likes_pizza) = 'yes'"
+- name     : favorite_topping_other
+  label    : "Specify other:"
+  type     : text
+  relevant : "selected(${favorite_toppings}, ‘other’)"
+
+- name     : favorite_cheese
+  label    : "What is your favorite type of cheese?"
+  type     : text
+  relevant : selected(${favorite_topping}, ‘cheese’)
+- name     : toppings
+  label    : "Order pizza toppings with your favorite on top"
+  type     : rank pizza_toppings
 
 choices:
 - list name: yes_no
@@ -23,3 +35,5 @@ choices:
     label  : "Pepperoni"
   - name   : sausage
     label  : "Sausage"
+  - name   : other
+    label  : "Other"

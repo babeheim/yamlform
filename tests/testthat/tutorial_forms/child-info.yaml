@@ -1,0 +1,23 @@
+
+survey:
+- name: child_repeat
+  type: begin repeat
+  survey:
+  - name: name
+    label: "Child's name"
+    type: text
+  - name: birthweight
+    label: "Child's birthweight"
+    type: decimal
+  - name: sex
+    label: "Child's sex"
+    type: select_one male_female
+
+choices:
+- list name: male_female
+  choices:
+  - name: male
+    label: "Male"
+  - name: female
+    label: "Female"
+

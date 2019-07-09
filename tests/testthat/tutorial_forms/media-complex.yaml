@@ -1,0 +1,12 @@
+
+survey:
+- name: media_example
+  type: note
+  label: "Media example"
+  hint:
+    English: "a hint"
+    Dutch: "een hint"
+  media:
+    image:
+      English: old_person_cartoon.jpg
+      Dutch: ouwe_strip.png

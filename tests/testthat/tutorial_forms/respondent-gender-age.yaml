@@ -1,0 +1,22 @@
+
+survey:
+- name: today
+  type: today
+- name: gender
+  label: "Respondent's gender?"
+  type: select_one gender
+- name: age
+  label: "Respondent's age?"
+  type: integer
+
+choices:
+- list name: gender
+  choices:
+  - name: transgender
+    label: "Transgender"
+  - name: female
+    label: "Female"
+  - name: male
+    label: "Male"
+  - name: other
+    label: "Other"

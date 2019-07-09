@@ -1,0 +1,9 @@
+
+survey:
+- name: name
+  label:
+    English: "Full Name"
+    Klingon: "Kaplaa"
+    Japanese: "Namae"
+    Espanol: "Nombre"
+  type: text

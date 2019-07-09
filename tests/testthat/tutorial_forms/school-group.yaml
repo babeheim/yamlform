@@ -1,0 +1,12 @@
+
+survey:
+- name: respondent
+  label: "Respondent"
+  type: begin group
+  survey:
+  - name: name
+    label: "Enter the respondent's name"
+    type: text
+  - name: position
+    label: "Enter the respondent's position within the school."
+    type: text

@@ -23,6 +23,8 @@ check_form <- function(form) {
   "decimal",
   "range",
   "text",
+  "select_one",
+  "select_multiple",
   "note",
   "geopoint",
   "geotrace",
@@ -39,14 +41,15 @@ check_form <- function(form) {
   "acknowledge",
   "hidden",
   "xml-external",
+  "rank",
   "begin repeat",
   "end repeat",
   "begin group",
-  "end group",
-  "select_one",
-  "select_multiple")
+  "end group")
 
   type_tags <- form$survey$type
+
+  type_tags <- gsub("rank .*", "rank", type_tags)
   type_tags <- gsub("select_one .*", "select_one", type_tags)
   type_tags <- gsub("select_multiple .*", "select_multiple", type_tags)
   check_tags_against_valid(type_tags, type_options)
@@ -93,13 +96,14 @@ convert_yamlform <- function(file, output = "xlsx") {
 
 
 ungroup_survey <- function(survey_object) {
+  if (!is.null(names(survey_object))) stop("survey_object must be an unnamed list!")
   survey_object %>% map(names) %>% map(~ any(. == "survey")) %>%
     unlist() %>% sum() -> n_subsurveys
   if (n_subsurveys > 0) {
     for (j in 1:n_subsurveys) {
       survey_object %>% map(names) %>% map(~ any(. == "survey")) %>%
         unlist() %>% which() %>% min() -> i
-      # any survey_object might have more of them nested inside
+      # any survey_object might have more of them nested inside, so apply this recursively
       survey_object[[i]]$survey %>% ungroup_survey -> survey_object[[i]]$survey
       sub_list <- c(
         survey_object[[i]]$survey,
@@ -116,20 +120,20 @@ ungroup_survey <- function(survey_object) {
   return(survey_object)
 }
 
-flatten_variants <- function(survey_object) {
-  for (i in 1:length(survey_object)) {
-    survey_object[[i]] %>% map(length) -> lengths
-    if (any(lengths > 1)) {
-      list_entries <- which(lengths > 1)
-      for (j in list_entries) {
-        names(survey_object[[i]][[j]]) <- paste0(names(survey_object[[i]])[j], "::",
-          names(survey_object[[i]][[j]]))
-      }
-      survey_object[[i]] %>% flatten -> survey_object[[i]]
-    }
+
+
+flatten_keys <- function(named_list) {
+  if (is.null(names(named_list))) stop("input must be a named list")
+  named_list %>% map(class) %>% map(~ . == "list") %>% unlist() %>% which() -> sublists
+  for (j in sublists) {
+    names(named_list[[j]]) <- paste0(names(named_list)[j], "::", names(named_list[[j]]))
+    class(named_list[[j]])
+    named_list[[j]] <- flatten_keys(named_list[[j]])
   }
-  return(survey_object)
+  named_list <- flatten(named_list)
+  return(named_list)
 }
+
 
 
 read_yamlform <- function(path) {
@@ -150,7 +154,10 @@ read_yamlform <- function(path) {
   }
 
   d$survey %>% ungroup_survey -> d$survey
-  d$survey %>% flatten_variants -> d$survey
+  d$survey %>% map(flatten_keys) -> d$survey
+  for(i in 1:length(d$survey)) {
+    if (!"label" %in% names(d$survey[[i]])) d$survey[[i]]$label <- ""
+  }
   d$survey %>% bind_rows() %>%
     select(type, name, label, everything()) -> d$survey
 

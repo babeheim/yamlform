@@ -1,0 +1,10 @@
+
+survey:
+- name: store_name
+  type: text
+  label: "What is the name of this store?"
+- name: store_gps
+  label: "Collect the GPS coordinates of this store."
+  type: geopoint
+  body:
+    accuracyThreshold: 1.5

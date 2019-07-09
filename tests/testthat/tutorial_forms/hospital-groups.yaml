@@ -1,0 +1,24 @@
+
+survey:
+- name: hospital
+  label: "Hospital"
+  type: begin group
+  survey:
+  - name: name
+    label: "What is the name of this hospital?"
+    type: text
+  - name: hiv_medication
+    label: "HIV Medication"
+    type: begin group
+    survey:
+    - name: have_hiv_medication
+      label: "Does this hospital have HIV medication"
+      type: select_one yes_no
+
+choices:
+- list name: yes_no
+  choices:
+  - name: "yes"
+    label: "yes"
+  - name: "no"
+    label: "no"

@@ -1,0 +1,8 @@
+
+survey:
+- name: media_example
+  type: note
+  label: "Media example"
+  media:
+    image: example.jpg
+    video: example.mp4

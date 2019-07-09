@@ -147,6 +147,3 @@ test_that("ungroup_survey works", {
   expect_silent(form$survey %>% ungroup_survey)
   expect_silent(form$survey %>% ungroup_survey %>% bind_rows)
 })
-
-
-

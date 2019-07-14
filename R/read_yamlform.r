@@ -9,6 +9,24 @@ check_tags_against_valid <- function(tags, valid){
 }
 
 
+flatten_choices <- function(choices) {
+  out <- list()
+  for (i in 1:length(choices)) {
+    for (j in 1:length(choices[[i]]$choices)) {
+      choices[[i]]$choices[[j]]$`list name` <- choices[[i]]$`list name`
+    }
+    out <- c(out, choices[[i]]$choices)
+  }
+  return(out)
+}
+
+add_label <- function(dat) {
+  if(!"label" %in% names(dat)) dat$label <- ""
+  return(dat)
+}
+
+
+
 check_form <- function(form) {
 
   type_options <- c(
@@ -145,22 +163,14 @@ read_yamlform <- function(path) {
   }
 
   if ("choices" %in% names(d)) {
-    choices <- list()
-    for (i in 1:length(d$choices)) {
-      d$choices[[i]]$choices %>% bind_rows() %>%
-        mutate(`list name` = d$choices[[i]]$`list name`) -> choices[[i]]
-    }
-    choices %>% bind_rows -> d$choices
+    d$choices %>% flatten_choices() %>%
+      map(flatten_keys) %>% bind_rows() %>% add_label() %>%
+      select(`list name`, name, label, everything()) -> d$choices
   }
 
-  d$survey %>% ungroup_survey -> d$survey
-  d$survey %>% map(flatten_keys) -> d$survey
-  for(i in 1:length(d$survey)) {
-    if (!"label" %in% names(d$survey[[i]])) d$survey[[i]]$label <- ""
-  }
-  d$survey %>% bind_rows() %>%
-    select(type, name, label, everything()) -> d$survey
-
+  d$survey %>% ungroup_survey %>% map(flatten_keys) %>% bind_rows() %>%
+    add_label() %>% select(type, name, label, everything()) -> d$survey
+  
   d %>% check_form()
 
   return(d)

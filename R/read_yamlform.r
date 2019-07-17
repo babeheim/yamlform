@@ -29,6 +29,11 @@ add_label <- function(dat) {
 
 check_form <- function(form) {
 
+  # to add:
+  # for a block of questions in a table-list format, need to make sure there is only one choices list
+  # every entry in choices must have a 'list name' entry, and must have a 'choices' entry
+  # every entry in the choices sublist must have a `name` and a `label`
+ 
   type_options <- c(
   "start",
   "end",
